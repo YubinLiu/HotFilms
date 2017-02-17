@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">热门电影</string>
+    <string name="film_detail">电影详情</string>
+    <string name="action_settings">设置</string>
+    <string name="pref_units_popular" translatable="false">popular</string>
+    <string name="pref_units_top_rated" translatable="false">top_rated</string>
+    <string name="pref_units_key" translatable="false">units</string>
+    <string name="pref_units_label">请选择排序方式</string>
+    <string name="pref_units_label_popular">按流行程度排序</string>
+    <string name="pref_units_label_top_rated">按评分高低排序</string>
+</resources>
