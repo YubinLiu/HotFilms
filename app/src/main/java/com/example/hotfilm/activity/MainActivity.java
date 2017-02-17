@@ -1,4 +1,4 @@
-package com.example.hotfilm;
+package com.example.hotfilm.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,13 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+
+import com.example.hotfilm.BuildConfig;
+import com.example.hotfilm.adapter.FilmAdapter;
+import com.example.hotfilm.filmclass.FilmDetail;
+import com.example.hotfilm.util.MyOkHttp;
+import com.example.hotfilm.R;
+import com.example.hotfilm.util.ShowToastUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,13 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshData() {
         if (isOnline()) {
-            posterUrlList.clear();
-            filmDetailList.clear();
             new FetchFilmTask().execute(u);
             adapter.notifyDataSetChanged();
             swipeRefresh.setRefreshing(false);
         } else {
-            Toast.makeText(this, "网络连接超时，请检查您的网络！", Toast.LENGTH_SHORT).show();
+            ShowToastUtil.showToast(R.string.overtime);
         }
     }
 
@@ -101,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
         if (isOnline()) {
             if (!unitType.equals(u)) {
                 u = unitType;
-                posterUrlList.clear();
-                filmDetailList.clear();
                 if (unitType.equals(getString(R.string.pref_units_popular))) {
                     new FetchFilmTask().execute(getString(R.string.pref_units_popular));
                 }
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         } else {
-            Toast.makeText(this, "网络连接超时，请检查您的网络！", Toast.LENGTH_SHORT).show();
+            ShowToastUtil.showToast(R.string.overtime);
         }
     }
 
@@ -205,8 +207,16 @@ public class MainActivity extends AppCompatActivity {
                     filmDetail.setRealseDate(jsonObject.getString("release_date"));
                     filmDetail.setVoteAverage(jsonObject.getDouble("vote_average"));
 
-                    posterUrlList.add(posterUrl);
-                    filmDetailList.add(filmDetail);
+                    if (posterUrlList.size() == jsonArray.length()) {
+                        posterUrlList.set(i, posterUrl);
+                    } else {
+                        posterUrlList.add(posterUrl);
+                    }
+                    if (filmDetailList.size() == jsonArray.length()) {
+                        filmDetailList.set(i, filmDetail);
+                    } else {
+                        filmDetailList.add(filmDetail);
+                    }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

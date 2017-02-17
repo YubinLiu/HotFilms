@@ -1,4 +1,4 @@
-package com.example.hotfilm;
+package com.example.hotfilm.util;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;

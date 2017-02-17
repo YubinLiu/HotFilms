@@ -1,4 +1,4 @@
-package com.example.hotfilm;
+package com.example.hotfilm.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.hotfilm.filmclass.FilmDetail;
+import com.example.hotfilm.R;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
@@ -29,7 +31,10 @@ public class DetailActivity extends AppCompatActivity {
 
         FilmDetail filmDetail = getIntent().getParcelableExtra("film_detail_data");
         filmTitle.setText(filmDetail.getTitle());
-        Picasso.with(this).load(filmDetail.getPosterUrl()).into(filmImg);
+        Picasso.with(this).load(filmDetail.getPosterUrl())
+                .placeholder(R.mipmap.ic_launcher) //正在下载的时候将会显示这张图片
+                .error(R.mipmap.ic_launcher) //下载失败的时候将会显示这张图片
+                .into(filmImg);
         filmReleaseDate.setText("上映时间:\n" + filmDetail.getRealseDate());
         filmVoteAverage.setText("评分:\n" + filmDetail.getVoteAverage() + " / 10");
         filmOverview.setText("主要剧情:\n" + filmDetail.getOverview());

@@ -1,4 +1,4 @@
-package com.example.hotfilm;
+package com.example.hotfilm.filmclass;
 
 import android.os.Parcel;
 import android.os.Parcelable;

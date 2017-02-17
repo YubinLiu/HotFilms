@@ -1,12 +1,15 @@
-package com.example.hotfilm;
+package com.example.hotfilm.activity;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.widget.LinearLayout;
 
-import static android.R.attr.value;
+import com.example.hotfilm.R;
 
 public class SettingsActivity extends PreferenceActivity
         implements Preference.OnPreferenceChangeListener {
@@ -16,6 +19,14 @@ public class SettingsActivity extends PreferenceActivity
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.pref_general);
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_units_key)));
+
+        //得到SettingsActivity的根布局
+        LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
+        //加载ToolBar
+        Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.action_bar, root, false);
+        //将Toolbar加到SettingsActivity的布局中
+        root.addView(bar, 0);
+
     }
 
     private void bindPreferenceSummaryToValue(Preference preference) {
