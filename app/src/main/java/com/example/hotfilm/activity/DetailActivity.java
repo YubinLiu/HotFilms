@@ -9,8 +9,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.hotfilm.filmclass.FilmDetail;
 import com.example.hotfilm.R;
+import com.example.hotfilm.bean.Film;
 import com.squareup.picasso.Picasso;
 
 public class DetailActivity extends AppCompatActivity {
@@ -29,24 +29,24 @@ public class DetailActivity extends AppCompatActivity {
         //初始化控件
         initViews();
 
-        FilmDetail filmDetail = getIntent().getParcelableExtra("film_detail_data");
-        filmTitle.setText(filmDetail.getTitle());
-        Picasso.with(this).load(filmDetail.getPosterUrl())
+        Film film = getIntent().getParcelableExtra("film_detail_data");
+        filmTitle.setText(film.getTitle());
+        Picasso.with(this).load(film.getBigPosterUrl())
                 .placeholder(R.mipmap.ic_launcher) //正在下载的时候将会显示这张图片
                 .error(R.mipmap.ic_launcher) //下载失败的时候将会显示这张图片
                 .into(filmImg);
-        filmReleaseDate.setText("上映时间:\n" + filmDetail.getRealseDate());
-        filmVoteAverage.setText("评分:\n" + filmDetail.getVoteAverage() + " / 10");
-        filmOverview.setText("主要剧情:\n" + filmDetail.getOverview());
+        filmReleaseDate.setText("上映时间:\n" + film.getRealseDate());
+        filmVoteAverage.setText("评分:\n" + film.getVoteAverage() + " / 10");
+        filmOverview.setText("主要剧情:\n" + film.getOverview());
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     //该活动启动所需要的数据
-    public static void actionStart(Context context, FilmDetail filmDetail) {
+    public static void actionStart(Context context, Film film) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra("film_detail_data", filmDetail);
+        intent.putExtra("film_detail_data", film);
         context.startActivity(intent);
     }
 

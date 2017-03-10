@@ -1,4 +1,4 @@
-package com.example.hotfilm.filmclass;
+package com.example.hotfilm.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by yubin on 2017/2/16.
  */
 
-public class FilmDetail implements Parcelable{
+public class Film implements Parcelable{
 
     //电影名称
     private String title;
@@ -18,8 +18,11 @@ public class FilmDetail implements Parcelable{
     //电影评分
     private double voteAverage;
 
-    //电影图片url
-    private String posterUrl;
+    //电影小图片url
+    private String smallPosterUrl;
+
+    //电影大图片url
+    private String bigPosterUrl;
 
     //电影简介
     private String overview;
@@ -48,14 +51,6 @@ public class FilmDetail implements Parcelable{
         this.voteAverage = voteAverage;
     }
 
-    public String getPosterUrl() {
-        return posterUrl;
-    }
-
-    public void setPosterUrl(String posterUrl) {
-        this.posterUrl = posterUrl;
-    }
-
     public String getOverview() {
         return overview;
     }
@@ -74,27 +69,45 @@ public class FilmDetail implements Parcelable{
         parcel.writeString(title);
         parcel.writeString(releaseDate);
         parcel.writeDouble(voteAverage);
-        parcel.writeString(posterUrl);
+        parcel.writeString(smallPosterUrl);
+        parcel.writeString(bigPosterUrl);
         parcel.writeString(overview);
     }
 
-    public static final Parcelable.Creator<FilmDetail> CREATOR =
-            new Parcelable.Creator<FilmDetail>() {
+    public static final Parcelable.Creator<Film> CREATOR =
+            new Parcelable.Creator<Film>() {
 
                 @Override
-                public FilmDetail createFromParcel(Parcel parcel) {
-                    FilmDetail filmDetail = new FilmDetail();
-                    filmDetail.title = parcel.readString();
-                    filmDetail.releaseDate = parcel.readString();
-                    filmDetail.voteAverage = parcel.readDouble();
-                    filmDetail.posterUrl = parcel.readString();
-                    filmDetail.overview = parcel.readString();
-                    return filmDetail;
+                public Film createFromParcel(Parcel parcel) {
+                    Film film = new Film();
+                    film.title = parcel.readString();
+                    film.releaseDate = parcel.readString();
+                    film.voteAverage = parcel.readDouble();
+                    film.smallPosterUrl = parcel.readString();
+                    film.bigPosterUrl = parcel.readString();
+                    film.overview = parcel.readString();
+                    return film;
                 }
 
                 @Override
-                public FilmDetail[] newArray(int size) {
-                    return new FilmDetail[size];
+                public Film[] newArray(int size) {
+                    return new Film[size];
                 }
             };
+
+    public String getSmallPosterUrl() {
+        return smallPosterUrl;
+    }
+
+    public void setSmallPosterUrl(String smallPosterUrl) {
+        this.smallPosterUrl = smallPosterUrl;
+    }
+
+    public String getBigPosterUrl() {
+        return bigPosterUrl;
+    }
+
+    public void setBigPosterUrl(String bigPosterUrl) {
+        this.bigPosterUrl = bigPosterUrl;
+    }
 }

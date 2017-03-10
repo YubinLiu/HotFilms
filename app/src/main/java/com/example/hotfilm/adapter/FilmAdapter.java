@@ -6,12 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.example.hotfilm.filmclass.FilmDetail;
 import com.example.hotfilm.R;
-import com.example.hotfilm.util.ShowToastUtil;
 import com.example.hotfilm.activity.DetailActivity;
 import com.example.hotfilm.activity.MainActivity;
+import com.example.hotfilm.bean.Film;
+import com.example.hotfilm.util.ShowToastUtil;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -26,7 +27,7 @@ import static com.example.hotfilm.activity.MainActivity.screenWidth;
 public class FilmAdapter
         extends RecyclerView.Adapter<FilmAdapter.ViewHolder> {
 
-    private List<String> mPosterUrlList;
+    private List<Film> mPosterUrlList;
 
     private Context mContext;
 
@@ -36,14 +37,20 @@ public class FilmAdapter
 
         ImageView posterImage;
 
+        TextView mainFilmName;
+
+        TextView mainVoteAverage;
+
         public ViewHolder(View view) {
             super(view);
             posterView = view;
             posterImage = (ImageView) view.findViewById(R.id.poster_film_img);
+            mainFilmName = (TextView) view.findViewById(R.id.main_film_name);
+            mainVoteAverage = (TextView) view.findViewById(R.id.main_vote_average);
         }
     }
 
-    public FilmAdapter(Context context, List<String> posterUrlList) {
+    public FilmAdapter(Context context, List<Film> posterUrlList) {
         mContext = context;
         mPosterUrlList = posterUrlList;
     }
@@ -58,8 +65,8 @@ public class FilmAdapter
             @Override
             public void onClick(View view) {
                 int position = holder.getAdapterPosition();
-                FilmDetail filmDetail = MainActivity.filmDetailList.get(position);
-                DetailActivity.actionStart(mContext, filmDetail);
+                Film film = MainActivity.filmList.get(position);
+                DetailActivity.actionStart(mContext, film);
             }
         });
         return holder;
@@ -68,7 +75,7 @@ public class FilmAdapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Picasso.with(mContext)
-                .load(mPosterUrlList.get(position))
+                .load(mPosterUrlList.get(position).getSmallPosterUrl())
                 .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher)
                 .into(holder.posterImage, new Callback() {
@@ -82,6 +89,8 @@ public class FilmAdapter
                         ShowToastUtil.showToast(R.string.dataLoadFailed);
                     }
                 });
+        holder.mainFilmName.setText("影片: " + mPosterUrlList.get(position).getTitle());
+        holder.mainVoteAverage.setText("评分: " + mPosterUrlList.get(position).getVoteAverage()+ " / 10");
     }
 
     @Override

@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="backgroundGreen">#579751</color>
     <color name="textWhite">#fff</color>
+    <color name="vote_average_color">#b80404</color>
 </resources>

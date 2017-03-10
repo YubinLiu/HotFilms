@@ -16,18 +16,16 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.example.hotfilm.BuildConfig;
-import com.example.hotfilm.adapter.FilmAdapter;
-import com.example.hotfilm.filmclass.FilmDetail;
-import com.example.hotfilm.util.MyOkHttp;
 import com.example.hotfilm.R;
+import com.example.hotfilm.adapter.FilmAdapter;
+import com.example.hotfilm.bean.Film;
+import com.example.hotfilm.fragment.MainFragment;
+import com.example.hotfilm.util.MyOkHttp;
 import com.example.hotfilm.util.ShowToastUtil;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static int screenWidth;
 
-    public static List<FilmDetail> filmDetailList = new ArrayList<>();
+    public static List<Film> filmList = new ArrayList<>();
 
+    private MainFragment mainFragment;
     private RecyclerView recyclerview;
     private FilmAdapter adapter;
-    private List<String> posterUrlList = new ArrayList<>();
     private String u = null;
 
     private SwipeRefreshLayout swipeRefresh;
@@ -127,9 +125,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        mainFragment = (MainFragment) getSupportFragmentManager().
+                findFragmentById(R.id.fragment_main);
+        swipeRefresh = (SwipeRefreshLayout)
+                mainFragment.getView().findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-        recyclerview = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerview = (RecyclerView)
+                mainFragment.getView().findViewById(R.id.recycler_view);
         GridLayoutManager layoutManager = new GridLayoutManager(
                 MainActivity.this, 2, GridLayoutManager.VERTICAL, false);
         recyclerview.setLayoutManager(layoutManager);
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             if (adapter == null) {
-                adapter = new FilmAdapter(MainActivity.this, posterUrlList);
+                adapter = new FilmAdapter(MainActivity.this, filmList);
                 recyclerview.setAdapter(adapter);
             } else {
                 //让适配器刷新数据
@@ -195,27 +197,27 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = (JSONObject) jsonArray.opt(i);
 
-                    FilmDetail filmDetail = new FilmDetail();
+                    Film film = new Film();
 
                     String posterPath = jsonObject.getString("poster_path");
-                    String posterUrl = POSTER_BASE_URL + posterPath;
+                    String posterUrlSmall = POSTER_BASE_URL + posterPath;
                     String posterUrlBig = POSTER_BASE_URL_BIG + posterPath;
 
-                    filmDetail.setTitle(jsonObject.getString("title"));
-                    filmDetail.setOverview(jsonObject.getString("overview"));
-                    filmDetail.setPosterUrl(posterUrlBig);
-                    filmDetail.setRealseDate(jsonObject.getString("release_date"));
-                    filmDetail.setVoteAverage(jsonObject.getDouble("vote_average"));
+                    String filmTitle = jsonObject.getString("title");
 
-                    if (posterUrlList.size() == jsonArray.length()) {
-                        posterUrlList.set(i, posterUrl);
+                    double voteAverage = jsonObject.getDouble("vote_average");
+
+                    film.setTitle(filmTitle);
+                    film.setOverview(jsonObject.getString("overview"));
+                    film.setSmallPosterUrl(posterUrlSmall);
+                    film.setBigPosterUrl(posterUrlBig);
+                    film.setRealseDate(jsonObject.getString("release_date"));
+                    film.setVoteAverage(voteAverage);
+
+                    if (filmList.size() == jsonArray.length()) {
+                        filmList.set(i, film);
                     } else {
-                        posterUrlList.add(posterUrl);
-                    }
-                    if (filmDetailList.size() == jsonArray.length()) {
-                        filmDetailList.set(i, filmDetail);
-                    } else {
-                        filmDetailList.add(filmDetail);
+                        filmList.add(film);
                     }
                 }
             } catch (JSONException e) {
